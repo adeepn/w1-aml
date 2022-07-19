@@ -5356,7 +5356,7 @@ unsigned int irr_para_reg_addr[] ={
 
 extern void print_driver_version(void);
 extern unsigned int efuse_manual_read(unsigned int addr);
-char *rssi_result_path = "/vendor/etc/rssi.txt";
+char *rssi_result_path = "/lib/firmware/w1/rssi.txt";
 
 int vm_cfg80211_vnd_cmd_set_para(struct wiphy *wiphy, struct wireless_dev *wdev, const void *data, int data_len)
 {

@@ -136,7 +136,7 @@ endif
 
 ifeq ($(CONFIG_MAC_SUPPORT),y)
 EXTRA_CFLAGS += -DCONFIG_MAC_SUPPORT
-EXTRA_CFLAGS += -DWIFIMAC_PATH=\"/data/vendor/wifi/wifimac.txt\"
+EXTRA_CFLAGS += -DWIFIMAC_PATH=\"/lib/firmware/w1/wifimac.txt\"
 endif
 
 ifeq ($(CONFIG_BT_RF_SUPPORT),y)
