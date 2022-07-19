@@ -1,22 +1,6 @@
-TARGET=vlsicomm.ko
+# SPDX-License-Identifier: GPL-2.0
+#
+# Makefile for the Linux Wireless network AmLogic W1 device driver
+#
 
-#PROJECT=PROJECT_W1
-#export PROJECT
-export PROJ_NAME
-
-all: firmware driver
-
-firmware:
-	make -C firmware
-
-driver:
-	make -C vmac
-	cp vmac/$(TARGET) ./
-   
-
-clean :
-	make clean -C firmware
-	make clean -C vmac
-	rm -rf $(TARGET)
-
-.PHONY:firmware driver
+obj-$(CONFIG_WLAN_VENDOR_W1) += vmac/

@@ -1,0 +1,4 @@
+config WLAN_VENDOR_W1
+	tristate
+	default m
+
