@@ -5318,7 +5318,7 @@ static struct cfg80211_ops vm_cfg80211_ops =
     .set_wiphy_params = vm_cfg80211_set_wiphy_params,
     .set_tx_power = vm_cfg80211_set_tx_power,
     .get_tx_power = vm_cfg80211_get_tx_power,
-    .set_wds_peer = vm_cfg80211_set_wds_peer,
+/*    .set_wds_peer = vm_cfg80211_set_wds_peer,*/
 
     .set_bitrate_mask = vm_cfg80211_set_bitrate_mask,
     .set_pmksa = aml_cfg80211_set_pmksa,
