@@ -2,7 +2,7 @@
 #define __FI_CONTENT_H__
 
 #include "wifi_hal_com.h"
-#include "wifi_aon_addr.h"
+#include "../common/wifi_aon_addr.h"
 #include "wifi_skbbuf.h"
 
 #define WIFI_ADDR_ISGROUP(wh) (((unsigned char *)wh)[4] & 1)
