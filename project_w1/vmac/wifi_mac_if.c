@@ -23,7 +23,7 @@
 #include "wifi_mac_sae.h"
 #include "wifi_common.h"
 #include "wifi_mac_action.h"
-#include "wifi_mac_tx_reg.h"
+#include "../common/wifi_mac_tx_reg.h"
 
 unsigned char tpc_mode = 0;
 extern unsigned char g_wftx_pwrtbl_en;

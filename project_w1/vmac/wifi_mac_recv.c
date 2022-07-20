@@ -17,7 +17,7 @@
 #include "wifi_mac_action.h"
 #include "wifi_mac_sae.h"
 #include "wifi_cmd_func.h"
-#include "wifi_mac_tx_reg.h"
+#include "../common/wifi_mac_tx_reg.h"
 
 static struct sk_buff *wifi_mac_defrag(struct wifi_station *, struct sk_buff *, int);
 static void wifi_mac_deliver_data(struct wifi_station *, struct sk_buff *);
