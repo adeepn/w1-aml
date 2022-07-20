@@ -21,7 +21,7 @@ namespace FW_NAME
 #include <linux/mmc/card.h>
 #include <linux/mmc/host.h>
 #include <linux/kthread.h>
-#include "rf_d_top_reg.h"
+#include "../common/rf_d_top_reg.h"
 #include "dpd_memory_packet.h"
 #elif defined (HAL_SIM_VER)
 #include "aml_product_test_i2c.h"
