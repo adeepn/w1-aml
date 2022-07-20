@@ -17,14 +17,14 @@
 #include <linux/inetdevice.h>
 #include <net/addrconf.h>
 #include "wifi_clock_measure.h"
-#include "rf_d_adda_recv_reg.h"
+#include "../common/rf_d_adda_recv_reg.h"
 #include "../common/chip_intf_reg.h"
 #include <linux/nl80211.h>
 #include "wifi_pkt_desc.h"
 #include "wifi_mac_sae.h"
 #include "wifi_mac_action.h"
 #include "version.h"
-#include "wifi_mac_tx_reg.h"
+#include "../common/wifi_mac_tx_reg.h"
 #include "wifi_drv_capture.h"
 
 #ifdef CONFIG_AML_CFG80211

@@ -7,7 +7,7 @@ namespace FW_NAME
 
 #include "wifi_hal_com.h"
 #include "wifi_hal_platform.h"
-#include "fucode_em4.h"
+#include "../common/fucode_em4.h"
 #include "wifi_hif.h"
 #include "wifi_common.h"
 #include "version.h"
