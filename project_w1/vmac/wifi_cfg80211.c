@@ -18,7 +18,7 @@
 #include <net/addrconf.h>
 #include "wifi_clock_measure.h"
 #include "rf_d_adda_recv_reg.h"
-#include "chip_intf_reg.h"
+#include "../common/chip_intf_reg.h"
 #include <linux/nl80211.h>
 #include "wifi_pkt_desc.h"
 #include "wifi_mac_sae.h"

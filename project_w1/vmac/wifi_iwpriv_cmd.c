@@ -1,7 +1,7 @@
 #include "wifi_mac_com.h"
 #include "wifi_iwpriv_cmd.h"
 #include "wifi_cmd_func.h"
-#include "chip_intf_reg.h"
+#include "../common/chip_intf_reg.h"
 #include <net/cfg80211.h>
 #include "version.h"
 #include "wifi_drv_capture.h"
