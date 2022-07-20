@@ -120,7 +120,9 @@ aml_sdio-objs += w1_sdio/w1_sdio.o
 
 obj-m += $(TARGET).o
 DISCARD :=
-SRC_FILE := $(wildcard $(CUR_DIR)/*.c $(CUR_DIR)/rf_t9026/*.c $(CUR_DIR)/crypto/*.c)
+#SRC_FILE := $(wildcard $(CUR_DIR)/*.c $(CUR_DIR)/rf_t9026/*.c $(CUR_DIR)/crypto/*.c)
+SRC_FILE := aml_static_buf.c print_version.c wifi_clock_measure.c wifi_drv_if.c wifi_drv_timer.c wifi_hal_txdesc.c wifi_mac_beacon.c wifi_mac_p2p.c wifi_mac_scan.c wifi_pt_init.c rc80211_minstrel.c wifi_cmd_func.c wifi_drv_main.c wifi_drv_uapsd.c wifi_hif.c wifi_mac_chan.c wifi_mac_pmf.c wifi_mac_sta.c wifi_pt_network.c rc80211_minstrel_ht.c wifi_common.c wifi_drv_power.c wifi_drv_xmit.c wifi_iwpriv_cmd.c wifi_mac_concurrent.c wifi_mac_power.c wifi_mac_xmit.c wifi_rate_ctrl.c rc80211_minstrel_init.c wifi_debug.c wifi_drv_recv.c wifi_hal.c wifi_mac_acl.c wifi_mac_encrypt.c wifi_mac_rate.c wifi_phy.c wifi_sdio.c wifi_android.c wifi_drv_capture.c wifi_drv_reg_ops.c wifi_hal_cmd.c wifi_mac_action.c wifi_mac_if.c wifi_mac_recv.c wifi_pkt_desc.c wifi_share_fifo.c wifi_cfg80211.c wifi_drv_config.c wifi_drv_statistic.c wifi_hal_platform.c wifi_mac_amsdu.c wifi_mac_monitor.c wifi_mac_sae.c wifi_pt_if.c wifi_skbbuf.c crypto/aes-ccm.c crypto/aes-gcm.c crypto/aes-internal-enc.c crypto/aes-siv.c crypto/ccmp.c crypto/sha256-internal.c crypto/aes-ctr.c crypto/aes-internal.c crypto/aes-omac1.c crypto/aml_crypto_wrap.c crypto/sha256.c crypto/sha256-prf.c
+
 TARGET_FILE = $(subst $(CUR_DIR)/,, $(SRC_FILE:%.c=%.o))
 
 ifneq ($(CONFIG_SDIO),)
