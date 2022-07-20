@@ -2050,7 +2050,9 @@ unsigned char get_cali_param(struct Cali_Param *cali_param, struct WF2G_Txpwr_Pa
     int size, len;
     int error = 0;
     char *content =  NULL;
+#ifdef get_fs
     mm_segment_t fs;
+#endif
 
     unsigned int chip_id_l = 0;
     unsigned char chip_id_buf[100];
@@ -2076,8 +2078,10 @@ unsigned char get_cali_param(struct Cali_Param *cali_param, struct WF2G_Txpwr_Pa
         printk("aml wifi module SN:%04x  sn txt not found, the rf config: %s\n", chip_id_l, chip_id_buf);
     } else
         printk("aml wifi module SN:%04x  the rf config: %s\n", chip_id_l, chip_id_buf);
+#ifdef get_fs
     fs = get_fs();
     set_fs(KERNEL_DS);
+#endif
 
     fp = filp_open(chip_id_buf, O_RDONLY, 0);
 
@@ -2147,11 +2151,15 @@ unsigned char get_cali_param(struct Cali_Param *cali_param, struct WF2G_Txpwr_Pa
     }
     FREE(content, "wifi_cali_param");
     filp_close(fp, NULL);
+#ifdef get_fs
     set_fs(fs);
+#endif
 
     return 0;
 err:
+#ifdef get_fs
     set_fs(fs);
+#endif
     return 1;
 }
 

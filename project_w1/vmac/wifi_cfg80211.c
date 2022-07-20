@@ -5850,13 +5850,17 @@ int vm_cfg80211_vnd_cmd_set_para(struct wiphy *wiphy, struct wireless_dev *wdev,
         if (wnet_vif->vm_state == WIFINET_S_CONNECTED) {
             struct kstat stat;
             struct file *fp;
+#ifdef get_fs
             mm_segment_t fs;
+#endif
             int error = 0;
             char buf[512] = {0};
             unsigned int arr[8] = {0};
 
+#ifdef get_fs
             fs = get_fs();
             set_fs(KERNEL_DS);
+#endif
 
             fp = filp_open(rssi_result_path, O_CREAT|O_RDWR, 0644);
 
@@ -5890,10 +5894,15 @@ int vm_cfg80211_vnd_cmd_set_para(struct wiphy *wiphy, struct wireless_dev *wdev,
             else {
                 ERROR_DEBUG_OUT("open file %s failed.\n", rssi_result_path);
             }
+#ifdef get_fs
 err:
             set_fs(fs);
+#endif
 
         }
+#ifndef get_fs
+err:
+#endif
         break;
 
     case VM_NL80211_VENDOR_UPDATE_WIPHY_PARAMS:

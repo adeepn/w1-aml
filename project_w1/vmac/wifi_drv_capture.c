@@ -343,9 +343,11 @@ int  dut_stop_tbus_to_get_sram(struct file *filep, int stop_ctrl, int save_file)
 
     struct hw_interface* hif = hif_get_hw_interface();
 
+#ifdef get_fs
     mm_segment_t fs;
     fs = get_fs();
     set_fs(KERNEL_DS);
+#endif
 
     //cap_len = hif->hif_ops.hi_read_word(TBC_OFFSET_110);
     cap_len = TBC_ADDR_END_OFFSET-TBC_ADDR_BEGIN_OFFSET;
@@ -409,7 +411,9 @@ int  dut_stop_tbus_to_get_sram(struct file *filep, int stop_ctrl, int save_file)
     }
 
     vfs_fsync(filep, 0);
+#ifdef set_fs
     set_fs(fs);
+#endif
     AML_OUTPUT("handle capture data complete\n");
     return 1;
 }
