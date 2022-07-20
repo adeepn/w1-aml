@@ -26,7 +26,7 @@ namespace FW_NAME
 #include "wifi_hal_cmd.h"
 #include "wifi_hal_txdesc.h"
 #include "wifi_hal.h"
-#include "patch_fi_cmd.h"
+#include "../common/patch_fi_cmd.h"
 #include "wifi_mac_if.h"
 #include "wifi_mac_chan.h"
 
