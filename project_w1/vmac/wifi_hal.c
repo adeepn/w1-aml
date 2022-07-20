@@ -2392,7 +2392,11 @@ int hal_work_thread(void *param)
 
     PRINT("############# Exit work Thread ###############\n");
     WAKE_LOCK_DESTROY(hal_priv, WAKE_LOCK_WORK);
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 17, 0)
+    kthread_complete_and_exit(&hal_priv->work_thread_completion, 0);
+#else
     complete_and_exit(&hal_priv->work_thread_completion, 0);
+#endif
 
     return 0;
 }
@@ -2459,7 +2463,11 @@ int hal_txok_thread(void *param)
 
     printk("%s(%d)  =====> exit TXOK Thread <=====\n",__func__,__LINE__);
     WAKE_LOCK_DESTROY(hal_priv, WAKE_LOCK_TXOK);
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 17, 0)
+    kthread_complete_and_exit(&hal_priv->txok_thread_completion, 0);
+#else
     complete_and_exit(&hal_priv->txok_thread_completion, 0);
+#endif
 
     return 0;
 }
@@ -2591,7 +2599,11 @@ int hal_rx_thread(void *param)
 
     printk("%s(%d)  =====> exit RX Thread <=====\n",__func__,__LINE__);
     WAKE_LOCK_DESTROY(hal_priv, WAKE_LOCK_RX);
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 17, 0)
+    kthread_complete_and_exit(&hal_priv->rx_thread_completion, 0);
+#else
     complete_and_exit(&hal_priv->rx_thread_completion, 0);
+#endif
     return 0;
 }
 
@@ -2640,7 +2652,11 @@ int hi_irq_thread(void *param)
     }
 
     WAKE_LOCK_DESTROY(hal_priv, WAKE_LOCK_HI_IRQ_THREAD);
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 17, 0)
+    kthread_complete_and_exit(&hal_priv->hi_irq_thread_completion, 0);
+#else
     complete_and_exit(&hal_priv->hi_irq_thread_completion, 0);
+#endif
 
     return 0;
 }

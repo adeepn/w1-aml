@@ -611,7 +611,11 @@ static int b2b_tx_thread_function(void *param)
         printk("**** stop : when pt send pkt %d done ***", loop);
     }// thread loop
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 17, 0)
+    kthread_complete_and_exit(&b2b_tx_struct.b2b_thread_cmplt, 0);
+#else
     complete_and_exit(&b2b_tx_struct.b2b_thread_cmplt, 0);
+#endif
     printk("**** exit b2b_tx_thread_function ***");
     return 0;
 }
