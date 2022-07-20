@@ -66,7 +66,7 @@ extern unsigned int HZ;
 #include "osdep.h"
 #include "rc80211_minstrel.h"
 #include "wifi_rate_ctrl.h"
-#include "fi_sdio.h"
+#include "../common/fi_sdio.h"
 
 /* convert mac80211 rate index to local array index */
 static inline int rix_to_ndx(struct minstrel_sta_info *mi, int rix)

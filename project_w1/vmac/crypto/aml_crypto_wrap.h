@@ -3,7 +3,7 @@
 
 #include <linux/types.h>
 #include <linux/kernel.h>
-#include "wifi_mac_com.h"
+#include "../wifi_mac_com.h"
 
 #define TEST_FAIL() 0
 
