@@ -65,13 +65,13 @@ struct _hi_agg_tx_desc_chain;
 #endif
 
 #include "wifi_share_fifo.h"
-#include "fi_sdio.h"
+#include "../common/fi_sdio.h"
 #include "opt_all.h"
-#include "fi_cmd.h"
+#include "../common/fi_cmd.h"
 
 struct hw_interface;
 
-#include "wifi_sys_addr.h"
+#include "../common/wifi_sys_addr.h"
 #if defined (HAL_FPGA_VER)
 #include "wifi_drv_config.h"
 #include "wifi_drv_statistic.h"
