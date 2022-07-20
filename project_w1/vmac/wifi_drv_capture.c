@@ -406,7 +406,9 @@ int  dut_stop_tbus_to_get_sram(struct file *filep, int stop_ctrl, int save_file)
     }
 
     vfs_fsync(filep, 0);
+#ifdef set_fs
     set_fs(fs);
+#endif
     AML_OUTPUT("handle capture data complete\n");
     return 1;
 }
