@@ -258,7 +258,7 @@ struct _HI_TxPrivDescripter_chain * Driver_GetTxPriv(void)
     return HI_TxPrivDp;
 }
 
-static void new_list_del(struct thr_list_head * prev, struct thr_list_head * next)
+static void new_list_del(struct list_head * prev, struct list_head * next)
 {
     next->prev = prev;
     prev->next = next;
@@ -290,7 +290,7 @@ extern struct hal_layer_ops *FiOpt2Driver;
 unsigned char Driver_FillAgg(struct _HI_AGG_TxDescripter_chain * HI_AGG_TxDp)
 {
     int i = 0;
-    struct thr_list_head *head;
+    struct list_head *head; // thr_list_head
     struct _HI_TxPrivDescripter_chain *HI_TxPrivDp;
     struct sk_buff *Hi_Agg_Txd_Is_Over = NULL;
 
