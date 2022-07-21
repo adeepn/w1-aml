@@ -2010,7 +2010,7 @@ unsigned char get_cali_param(struct Cali_Param *cali_param, struct WF2G_Txpwr_Pa
     struct file *fp;
     struct kstat stat;
     int size, len;
-    int error = 0;
+/* !!! TODO    int error = 0; */
     char *content =  NULL;
 #ifdef get_fs
     mm_segment_t fs;
@@ -2051,7 +2051,7 @@ unsigned char get_cali_param(struct Cali_Param *cali_param, struct WF2G_Txpwr_Pa
         fp = NULL;
         goto err;
     }
-
+/* !!! TODO
     error = vfs_stat(chip_id_buf, &stat);
     if (error) {
         filp_close(fp, NULL);
@@ -2063,7 +2063,7 @@ unsigned char get_cali_param(struct Cali_Param *cali_param, struct WF2G_Txpwr_Pa
         filp_close(fp, NULL);
         goto err;
     }
-
+*/
     content = ZMALLOC(size, "wifi_cali_param", GFP_KERNEL);
 
     if (content == NULL) {

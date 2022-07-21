@@ -5706,7 +5706,7 @@ int vm_cfg80211_vnd_cmd_set_para(struct wiphy *wiphy, struct wireless_dev *wdev,
 #ifdef get_fs
             mm_segment_t fs;
 #endif
-            int error = 0;
+/* !!! TODO            int error = 0; */
             char buf[512] = {0};
             unsigned int arr[8] = {0};
 
@@ -5727,7 +5727,7 @@ int vm_cfg80211_vnd_cmd_set_para(struct wiphy *wiphy, struct wireless_dev *wdev,
                         arr[0], arr[1]);
                     sprintf(&buf[strlen(buf)], "snr_qdb:%d crc_err:%d, crc_ok:%d, noise_f:%d\r\n",
                         arr[5], arr[2], arr[3], arr[4]);
-
+/* !!! TODO
                     error = vfs_stat(rssi_result_path, &stat);
                     if (error) {
                         filp_close(fp, NULL);
@@ -5739,7 +5739,7 @@ int vm_cfg80211_vnd_cmd_set_para(struct wiphy *wiphy, struct wireless_dev *wdev,
                         filp_close(fp, NULL);
                         goto err;
                     }
-
+*/
                     vfs_write(fp, buf, strlen(buf), &fp->f_pos);
                 }
                 filp_close(fp, NULL);
