@@ -229,7 +229,7 @@ static void usb_power_control(int is_power, int shift)
 			WIFI_INFO("Set %s power on !\n",
 				  (shift ? "WiFi" : "BT"));
 			msleep(200);
-			sdio_reinit();
+			//!!!! TODO sdio_reinit();
 		}
 		usb_power |= (1 << shift);
 		WIFI_INFO("Set %s power on !\n",
