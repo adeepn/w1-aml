@@ -2345,7 +2345,7 @@ int hal_work_thread(void *param)
     PRINT("%s(%d)  =====creat thread hal_worl_thread<=====\n",__func__,__LINE__);
 
     sch_param.sched_priority = 91;
-    sched_setscheduler(current, SCHED_RR, &sch_param);
+    //sched_setscheduler(current, SCHED_RR, &sch_param);
 
     WAKE_LOCK_INIT(hal_priv,WAKE_LOCK_WORK,"hal_work_thread");
     while (!hal_priv->work_thread_quit)
@@ -2413,7 +2413,7 @@ int hal_txok_thread(void *param)
     unsigned char queue_id = 0;
 
     sch_param.sched_priority = 91;
-    sched_setscheduler(current, SCHED_RR, &sch_param);
+    //sched_setscheduler(current, SCHED_RR, &sch_param);
     WAKE_LOCK_INIT(hal_priv, WAKE_LOCK_TXOK, "hal_txok_thread");
     while (!hal_priv->txok_thread_quit)
     {
@@ -2491,7 +2491,7 @@ int hal_rx_thread(void *param)
 #endif
 
     sch_param.sched_priority = 91;
-    sched_setscheduler(current, SCHED_FIFO, &sch_param);
+    //sched_setscheduler(current, SCHED_FIFO, &sch_param);
 
     printk("%s(%d)  =====creat thread hal_rx_thread<=====\n",__func__,__LINE__);
 
@@ -2613,7 +2613,7 @@ int hi_irq_thread(void *param)
     struct sched_param sch_param;
 
     sch_param.sched_priority = 93;
-    sched_setscheduler(current, SCHED_FIFO, &sch_param);
+    //sched_setscheduler(current, SCHED_FIFO, &sch_param);
     hal_priv->hi_task_stop = 0;
     WAKE_LOCK_INIT(hal_priv,WAKE_LOCK_HI_IRQ_THREAD,"hi_irq_thread");
     while (!hal_priv->hi_irq_thread_quit)
