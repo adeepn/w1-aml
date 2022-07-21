@@ -24,7 +24,7 @@
 #include <linux/delay.h>
 #include <linux/err.h>
 #include <linux/skbuff.h>
-#include <linux/wlan_plat.h>
+//#include <linux/wlan_plat.h>
 #include <linux/amlogic/dhd_buf.h>
 
 #define	DHD_STATIC_VERSION_STR		"101.10.361.10 (wlan=r892223-20210623-1)"
