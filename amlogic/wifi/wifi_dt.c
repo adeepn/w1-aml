@@ -394,12 +394,12 @@ static long wifi_power_ioctl(struct file *filp,
 		WIFI_INFO("ioctl Set sdio wifi power down!\n");
 		break;
 	case SDIO_GET_DEV_TYPE:
-		if (strlen(get_wifi_inf()) >= sizeof(dev_type))
-			memcpy(dev_type, get_wifi_inf(),
+		if (strlen("sdio") >= sizeof(dev_type))
+			memcpy(dev_type, "sdio",
 			       (sizeof(dev_type) - 1));
 		else
-			memcpy(dev_type, get_wifi_inf(),
-			       strlen(get_wifi_inf()));
+			memcpy(dev_type, "sdio",
+			       strlen("sdio"));
 		WIFI_INFO("wifi interface dev type: %s, length = %d\n",
 			  dev_type, (int)strlen(dev_type));
 		if (copy_to_user((char __user *)arg,
