@@ -1402,6 +1402,7 @@ int wifi_mac_cap_attach(struct wifi_mac *wifimac, struct drv_private* drv_priv)
 {
     struct driver_ops  *ops = NULL;
     int vid = 0;
+    int inum=11;
 
     wifimac->wm_mac_exit =0;
     wifimac->drv_priv = drv_priv;
@@ -1414,6 +1415,7 @@ int wifi_mac_cap_attach(struct wifi_mac *wifimac, struct drv_private* drv_priv)
 
     ops = &drv_priv->drv_ops;
     wifi_mac_amsdu_attach(wifimac);
+    AML_OUTPUT("<running> 1\n");
     // wifi_mac_com_clear_cap(wifimac, -1);
 
     wifi_mac_ComSetCap(wifimac, WIFINET_C_IBSS | WIFINET_C_HOSTAP | WIFINET_C_SHPREAMBLE
@@ -1422,6 +1424,7 @@ int wifi_mac_cap_attach(struct wifi_mac *wifimac, struct drv_private* drv_priv)
 
     if (ops->drv_get_config_param(drv_priv, CHIP_PARAM_WMM))
         wifi_mac_ComSetCap(wifimac, WIFINET_C_WME);
+    AML_OUTPUT("<running> 2\n");
 
     wifimac->wm_ac2q[WME_AC_BE] = HAL_WME_AC_BE;
     wifimac->wm_ac2q[WME_AC_BK] = HAL_WME_AC_BK;
@@ -1446,27 +1449,32 @@ int wifi_mac_cap_attach(struct wifi_mac *wifimac, struct drv_private* drv_priv)
         wifi_mac_ComSetCap(wifimac, WIFINET_C_WEP);
     if (ops->drv_get_config_param(drv_priv, CHIP_PARAM_CIPHER_WPI))
         wifi_mac_ComSetCap(wifimac, WIFINET_C_WAPI);
+    AML_OUTPUT("<running> 3\n");
     if (ops->drv_get_config_param(drv_priv, CHIP_PARAM_CIPHER_AES_CCM))
     {
         wifi_mac_ComSetCap(wifimac, WIFINET_C_AES);
         wifi_mac_ComSetCap(wifimac, WIFINET_C_AES_CCM);
     }
+    AML_OUTPUT("<running> 4\n");
     if (ops->drv_get_config_param(drv_priv, CHIP_PARAM_CIPHER_TKIP))
         wifi_mac_ComSetCap(wifimac, WIFINET_C_TKIP);
 
     if (ops->drv_get_config_param(drv_priv, CHIP_PARAM_HWTKIPMIC))
         wifi_mac_ComSetCap(wifimac, WIFINET_C_TKIPMIC);
 
+    AML_OUTPUT("<running> 5\n");
     if (ops->drv_get_config_param(drv_priv, CHIP_PARAM_HWCSUM))
     {
         wifi_mac_ComSetCap(wifimac, WIFINET_C_HWCSUM);
     }
+    AML_OUTPUT("<running> 6\n");
     if (ops->drv_get_config_param(drv_priv, CHIP_PARAM_BWAUTOCONTROL))
     {
         wifi_mac_ComSetCap(wifimac, WIFINET_C_BWCTRL);
     }
 
     wifi_mac_com_clear_flag(wifimac, WIFINET_F_DOTH);
+    AML_OUTPUT("<running> 7\n");
 
     if (ops->drv_get_config_param(drv_priv, CHIP_PARAM_HT))
     {
@@ -1483,6 +1491,7 @@ int wifi_mac_cap_attach(struct wifi_mac *wifimac, struct drv_private* drv_priv)
         wifi_mac_com_set_extflag(wifimac, WIFINET_FEXT_SHORTGI_ENABLE);
     }
 
+    AML_OUTPUT("<running> 8\n");
 
     if (ops->drv_get_config_param(drv_priv, CHIP_PARAM_VHT))
     {
@@ -1497,6 +1506,7 @@ int wifi_mac_cap_attach(struct wifi_mac *wifimac, struct drv_private* drv_priv)
         wifi_mac_com_set_extflag(wifimac, WIFINET_FEXT_AMPDU);
     }
 
+    AML_OUTPUT("<running> 9\n");
     /*set burst flag, burst frames in txop. */
     if (ops->drv_get_config_param(drv_priv, CHIP_PARAM_BURST_ACK))
     {
@@ -1515,34 +1525,52 @@ int wifi_mac_cap_attach(struct wifi_mac *wifimac, struct drv_private* drv_priv)
     {
         ASSERT(0);
     }
+    AML_OUTPUT("<running> 10\n");
 
     /*set channel num and set current use channel by country code.*/
     wifi_mac_chan_attach(wifimac);
 
     if (wifimac->wm_caps & WIFINET_C_WME)
         wifimac->wm_flags |= WIFINET_F_WME;
+    AML_OUTPUT("<running> %i\n", inum); inum++;
 
     wifi_mac_reset_erp(wifimac, WIFINET_MODE_11BGN);
+    AML_OUTPUT("<running> %i\n", inum); inum++;
     wifi_mac_reset_ht(wifimac);
+    AML_OUTPUT("<running> %i\n", inum); inum++;
 
     wifimac->wm_suspend_mode = WIFI_SUSPEND_STATE_NONE;
+    AML_OUTPUT("<running> %i\n", inum); inum++;
     init_waitqueue_head(&wifimac->wm_suspend_wq);
+    AML_OUTPUT("<running> %i\n", inum); inum++;
 
     WIFINET_LOCK_INIT(wifimac, "wifi_mac");
+    AML_OUTPUT("<running> %i\n", inum); inum++;
     WIFINET_PSLOCK_INIT(wifimac, "wifi_mac_ps");
+    AML_OUTPUT("<running> %i\n", inum); inum++;
     WIFINET_QLOCK_INIT(wifimac, " wifi_mac_queue ");
+    AML_OUTPUT("<running> %i\n", inum); inum++;
     WIFINET_BEACONLOCK_INIT(wifimac, "wifi_mac_beacon");
+    AML_OUTPUT("<running> %i\n", inum); inum++;
     WIFINET_BEACONBUFLOCK_INIT(wifimac, "wifi_mac_beaconbuf");
+    AML_OUTPUT("<running> %i\n", inum); inum++;
     WIFINET_VMACS_LOCK_INIT(wifimac, "wlan_net_vif");
+    AML_OUTPUT("<running> %i\n", inum); inum++;
     spin_lock_init(&wifimac->channel_lock);
+    AML_OUTPUT("<running> %i\n", inum); inum++;
 
     /*init vmac list. */
     INIT_LIST_HEAD(&wifimac->wm_wnet_vifs);
+    AML_OUTPUT("<running> %i\n", inum); inum++;
     INIT_LIST_HEAD(&wifimac->wm_free_entryq);
+    AML_OUTPUT("<running> %i\n", inum); inum++;
     WIFINET_NODE_FREE_LOCK_INIT(wifimac);
+    AML_OUTPUT("<running> %i\n", inum); inum++;
 
     wifimac->gain_set_threshold = MAX_GIAN_THRESHOLD;
+    AML_OUTPUT("<running> %i\n", inum); inum++;
     wifimac->is_need_set_gain = 1;
+    AML_OUTPUT("<running> %i\n", inum); inum++;
 
     wifimac->wm_txpowlimit = WIFINET_TXPOWER_MAX;
     wifimac->wm_rx_streams = WIFINET_RXSTREAM;
@@ -1556,13 +1584,16 @@ int wifi_mac_cap_attach(struct wifi_mac *wifimac, struct drv_private* drv_priv)
         wifimac->wm_wme[vid].wme_hipri_switch_hysteresis = 3;
     }
     wifi_mac_pwrsave_attach();
+    AML_OUTPUT("<running> %i\n", inum); inum++;
     /*prepare encryption cipher and de/encrypt handler */
     wifi_mac_security_attach(wifimac);
+    AML_OUTPUT("<running> %i\n", inum); inum++;
     /* initialize inact_timer for ap&sta, sta will keep alive
     to ap (send nulldata to ap), ap will monitor if sta leave bss.*/
 
     /*initlialize scan param and scan_timer */
     wifi_mac_scan_attach(wifimac);
+    AML_OUTPUT("<running> %i\n", inum); inum++;
     wifimac->wm_esco_en    = 0;
     wifimac->wm_bt_en = 0;
 
@@ -1572,6 +1603,7 @@ int wifi_mac_cap_attach(struct wifi_mac *wifimac, struct drv_private* drv_priv)
     wifimac->wm_vsdb_switch_time = 0;
     wifimac->vsdb_mode_set_noa_enable = 0;
 
+    AML_OUTPUT("<running> %i concurr\n", inum); inum++;
     /*init a concurrent timer for vmac channel concurrent function. */
     os_timer_ex_initialize(&wifimac->wm_concurrenttimer, COMCURRENT_CHANNCHANGE_TIME,
         concurrent_change_channel_timeout, wifimac);
