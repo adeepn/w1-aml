@@ -8,7 +8,7 @@ EXTRA_CFLAGS += -DSYSTEM32
 else ifeq ($(ARCH),arm64)
 SYSTEM_TYPE = SYSTEM64
 CROSS_COMPILE ?= aarch64-linux-gnu-
-EXTRA_CFLAGS += -DSYSTEM64
+EXTRA_CFLAGS += -DSYSTEM64 -g
 endif
 
 
@@ -180,9 +180,9 @@ modules:
 	@echo "EXTRA_CFLAGS=$(EXTRA_CFLAGS)"
 	$(MAKE) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C $(KERNEL_SRC) M=$(M) modules
 ifneq (${OUT_DIR},)
-	$(CROSS_COMPILE)strip --strip-unneeded ${OUT_DIR}/$(M)/$(TARGET).ko
+	$(CROSS_COMPILE)strip ${OUT_DIR}/$(M)/$(TARGET).ko
 else
-	$(STRIP) -S $(TARGET).ko
+	$(STRIP) $(TARGET).ko
 endif
 
 modules_install:
