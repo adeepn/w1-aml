@@ -1674,14 +1674,17 @@ int wifi_mac_entry(struct wifi_mac *wifimac, void *drv_priv)
     AML_OUTPUT("<running>++ \n");
 
     error = wifi_mac_cap_attach(wifimac,(struct drv_private*)drv_priv);
+    AML_OUTPUT("<running>++ cap_attach %i \n", error);
     if (error != 0)
         goto bad;
 
     error = wifi_mac_tx_init(wifimac);
+    AML_OUTPUT("<running>++ tx_init %i \n", error);
     if (error != 0)
         goto bad1;
 
     error = wifimac->drv_priv->drv_ops.rx_init(drv_priv, DRV_RXDESC_NUM);
+    AML_OUTPUT("<running>++ rx_init %i \n", error);
     if (error != 0)
         goto bad2;
 
