@@ -1664,9 +1664,11 @@ unsigned char wifi_mac_tx_init(struct wifi_mac *wifimac) {
     bsize = sizeof(struct drv_txdesc) * DRV_TXDESC_NUM;
 #ifdef CONFIG_AML_USE_STATIC_BUF
     ptxdesc = wifi_mem_prealloc(AML_TX_DESC_BUF, bsize);
+    AML_OUTPUT("<running> static buf %p\n", ptxdesc);
     memset(ptxdesc, 0, bsize);
 #else
     ptxdesc = (struct drv_txdesc *)NET_MALLOC(bsize, GFP_KERNEL, "drv_tx_init.ptxdesc");
+    AML_OUTPUT("<running> nonstatic buf %p\n", ptxdesc);
 #endif
     AML_OUTPUT("<running> 2\n");
     if (ptxdesc == NULL)
