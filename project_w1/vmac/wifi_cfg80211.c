@@ -4899,7 +4899,7 @@ vm_cfg80211_get_channel(struct wiphy *wiphy, struct wireless_dev *wdev,
     return -1;
     if (!chandef || !wiphy) {
        ERROR_DEBUG_OUT("chandef or wiphy null\n");
-//       return -1;
+       return -1;
     }
 
     wnet_vif = wiphy_to_adapter(wiphy);
