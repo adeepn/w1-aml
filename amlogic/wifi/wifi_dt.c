@@ -131,7 +131,8 @@ __printf(2, 3) __cold
 void w1_dev_info(const struct device *dev, const char *fmt, ...);
 
 #define WIFI_INFO(fmt, args...)	\
-	w1dev_info(wifi_info.dev, "[%s] " fmt, __func__, ##args)
+	dev_info(wifi_info.dev, "[%s] " fmt, __func__, ##args)
+//	printk("!!!!WIFI_INFO [%s] " fmt, __func__, ##args)
 
 #ifdef CONFIG_OF
 static const struct of_device_id wifi_match[] = {
@@ -199,6 +200,7 @@ static int set_power2(int value)
 static int set_wifi_power(int is_power)
 {
 	int ret = 0;
+	WIFI_INFO("power up setup(%d)\n", ret);
 
 	if (is_power) {
 		if (wifi_info.power_on_pin) {
@@ -229,6 +231,7 @@ static int set_wifi_power(int is_power)
 static void usb_power_control(int is_power, int shift)
 {
 	mutex_lock(&wifi_bt_mutex);
+	WIFI_INFO("Set in usb_power_control power on !\n");
 	if (is_power) {
 		if (!usb_power) {
 			set_wifi_power(is_power);
@@ -378,6 +381,7 @@ static long wifi_power_ioctl(struct file *filp,
 {
 	char dev_type[10] = {'\0'};
 
+	WIFI_INFO(KERN_INFO "!!!!! ioctl wifi_power_ioctl!\n");
 	switch (cmd) {
 	case USB_POWER_UP:
 		set_usb_wifi_power(0);
