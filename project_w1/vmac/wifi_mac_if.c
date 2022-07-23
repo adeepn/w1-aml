@@ -1593,7 +1593,7 @@ int wifi_mac_cap_attach(struct wifi_mac *wifimac, struct drv_private* drv_priv)
 
     /*initlialize scan param and scan_timer */
     wifi_mac_scan_attach(wifimac);
-    AML_OUTPUT("<running> %i\n", inum); inum++;
+    AML_OUTPUT("<running> %i wifi_mac_scan_attach %p\n", inum, wifimac); inum++;
     wifimac->wm_esco_en    = 0;
     wifimac->wm_bt_en = 0;
 
@@ -1603,7 +1603,7 @@ int wifi_mac_cap_attach(struct wifi_mac *wifimac, struct drv_private* drv_priv)
     wifimac->wm_vsdb_switch_time = 0;
     wifimac->vsdb_mode_set_noa_enable = 0;
 
-    AML_OUTPUT("<running> %i concurr\n", inum); inum++;
+    AML_OUTPUT("<running> %i concurr %p\n", inum, wifimac); inum++;
     /*init a concurrent timer for vmac channel concurrent function. */
     os_timer_ex_initialize(&wifimac->wm_concurrenttimer, COMCURRENT_CHANNCHANGE_TIME,
         concurrent_change_channel_timeout, wifimac);
@@ -1710,10 +1710,13 @@ int wifi_mac_entry(struct wifi_mac *wifimac, void *drv_priv)
 {
     int error = 0;
 
-    AML_OUTPUT("<running>++ %p\n", wifimac);
-
+    AML_OUTPUT("<running>+1 %p\n", wifimac);
+    AML_OUTPUT("<running>+1 %p\n", wifimac);
+    AML_OUTPUT("<running>+1 %p\n", wifimac);
+    AML_OUTPUT("<running>+1 %p\n", wifimac);
+    if (!wifimac) goto bad;
     error = wifi_mac_cap_attach(wifimac,(struct drv_private*)drv_priv);
-    AML_OUTPUT("<running>++ cap_attach %i \n", error);
+    AML_OUTPUT("<running>++ cap_attach %i %p\n", error, wifimac);
     if (error != 0)
         goto bad;
 
