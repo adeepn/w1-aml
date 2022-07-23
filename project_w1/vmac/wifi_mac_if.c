@@ -1656,6 +1656,7 @@ unsigned char wifi_mac_tx_init(struct wifi_mac *wifimac) {
     struct drv_txdesc *ptxdesc;
     int i, bsize;
 
+    AML_OUTPUT("<running> before lock_init %p\n", wifimac);
     TX_DESC_BUF_LOCK_INIT(wifimac);
     AML_OUTPUT("<running> lock_init\n");
 
@@ -1709,13 +1710,14 @@ int wifi_mac_entry(struct wifi_mac *wifimac, void *drv_priv)
 {
     int error = 0;
 
-    AML_OUTPUT("<running>++ \n");
+    AML_OUTPUT("<running>++ %p\n", wifimac);
 
     error = wifi_mac_cap_attach(wifimac,(struct drv_private*)drv_priv);
     AML_OUTPUT("<running>++ cap_attach %i \n", error);
     if (error != 0)
         goto bad;
 
+    AML_OUTPUT("<running>++ cap_attach2 %i %p %p \n", error, wifimac, &wifimac->txdesc_freequeue);
     error = wifi_mac_tx_init(wifimac);
     AML_OUTPUT("<running>++ tx_init %i \n", error);
     if (error != 0)
