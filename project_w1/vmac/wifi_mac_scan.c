@@ -1234,6 +1234,7 @@ scan_start_task(SYS_TYPE param1,SYS_TYPE param2,
         WIFI_SCAN_UNLOCK(ss);
         return;
     }
+    printk("!!!+ %s scan_StateFlags:%04x, wm_scanplayercnt:%ld\n", __func__, ss->scan_StateFlags, wifimac->wm_scanplayercnt);
 
     ss->scan_StateFlags = 0;
     ss->scan_StateFlags |= SCANSTATE_F_START;
