@@ -1683,7 +1683,6 @@ unsigned char wifi_mac_tx_init(struct wifi_mac *wifimac) {
     for (i = 0; i < DRV_TXDESC_NUM; i++, ptxdesc++)
     {
         list_add_tail(&ptxdesc->txdesc_queue, head);
-        AML_OUTPUT("<running> 4 %i\n", i);
     }
 
     AML_OUTPUT("<running> 5\n");
