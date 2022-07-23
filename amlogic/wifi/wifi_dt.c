@@ -124,8 +124,14 @@ static int usb_power;
 #define WIFI_BIT	1
 static DEFINE_MUTEX(wifi_bt_mutex);
 
+#define w1dev_info(dev, fmt, ...)	\
+	w1_dev_info(dev, dev_fmt(fmt), ##__VA_ARGS__)
+
+__printf(2, 3) __cold
+void w1_dev_info(const struct device *dev, const char *fmt, ...);
+
 #define WIFI_INFO(fmt, args...)	\
-	dev_info(wifi_info.dev, "[%s] " fmt, __func__, ##args)
+	w1dev_info(wifi_info.dev, "[%s] " fmt, __func__, ##args)
 
 #ifdef CONFIG_OF
 static const struct of_device_id wifi_match[] = {
