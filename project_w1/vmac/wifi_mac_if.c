@@ -1657,6 +1657,7 @@ unsigned char wifi_mac_tx_init(struct wifi_mac *wifimac) {
     int i, bsize;
 
     TX_DESC_BUF_LOCK_INIT(wifimac);
+    AML_OUTPUT("<running> lock_init\n");
 
     /* Setup tx descriptors */
     bsize = sizeof(struct drv_txdesc) * DRV_TXDESC_NUM;
@@ -1666,18 +1667,23 @@ unsigned char wifi_mac_tx_init(struct wifi_mac *wifimac) {
 #else
     ptxdesc = (struct drv_txdesc *)NET_MALLOC(bsize, GFP_KERNEL, "drv_tx_init.ptxdesc");
 #endif
+    AML_OUTPUT("<running> 2\n");
     if (ptxdesc == NULL)
     {
         return -ENOMEM;
     }
     wifimac->txdesc_bufptr = ptxdesc;
+    AML_OUTPUT("<running> 3\n");
 
     INIT_LIST_HEAD(head);
+    AML_OUTPUT("<running> 4\n");
     for (i = 0; i < DRV_TXDESC_NUM; i++, ptxdesc++)
     {
         list_add_tail(&ptxdesc->txdesc_queue, head);
+        AML_OUTPUT("<running> 4 %i\n", i);
     }
 
+    AML_OUTPUT("<running> 5\n");
     return wifimac->drv_priv->drv_ops.tx_init(wifimac->drv_priv, DRV_TXDESC_NUM);
 }
 
