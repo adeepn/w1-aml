@@ -54,7 +54,8 @@ void *wifi_mem_prealloc(int section, unsigned long size)
 				size, AML_TX_DESC_BUF_SIZE);
 			return NULL;
 		}
-
+		pr_info("request AML_TX_DESC_BUF(%lu) (maxsize %d) before bcmdhd_mem_prealloc\n",
+				size, AML_TX_DESC_BUF_SIZE);
 		return bcmdhd_mem_prealloc(AML_TX, size);;
 	}
 	return NULL;
