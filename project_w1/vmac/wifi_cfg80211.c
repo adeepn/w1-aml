@@ -27,6 +27,10 @@
 #include "wifi_mac_tx_reg.h"
 #include "wifi_drv_capture.h"
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 15, 0))
+MODULE_IMPORT_NS(VFS_internal_I_am_really_a_filesystem_and_am_NOT_a_driver);
+#endif
+
 #ifdef CONFIG_AML_CFG80211
 
 /** vendor events */
@@ -2312,6 +2316,21 @@ exit:
     return ret;
 }
 
+int softap_get_sta_num(struct wlan_net_vif *wnet_vif)
+{
+    struct wifi_station *sta_next = NULL;
+    struct wifi_station *sta = NULL;
+    int sta_num = 0;
+
+    struct wifi_station_tbl *nt = &wnet_vif->vm_sta_tbl;
+    WIFINET_NODE_LOCK(nt);
+    list_for_each_entry_safe(sta, sta_next, &nt->nt_nsta, sta_list) {
+        sta_num += 1;
+    }
+    WIFINET_NODE_UNLOCK(nt);
+    return sta_num -1;
+}
+
 static  int vm_cfg80211_add_key(struct wiphy *wiphy, struct net_device *dev, unsigned char key_index,
     bool pairwise, const unsigned char *mac_addr, struct key_params *params)
 {
@@ -2324,6 +2343,8 @@ static  int vm_cfg80211_add_key(struct wiphy *wiphy, struct net_device *dev, uns
     struct wifi_mac_key *wk;
     struct wifi_station *sta;
     struct wifi_mac *wifimac = wnet_vif->vm_wmac;
+    int total_delay = 0;
+    struct drv_private *drv_priv = wifimac->drv_priv;
 
     DPRINTF(AML_DEBUG_CFG80211, "%s adding key for <%s> vm_state=%d, cipher=0x%x key_len=%d seq_len=%d kid=%d, pariwise:%d\n",
         __func__, dev->name, wnet_vif->vm_state, lparams->cipher, lparams->key_len, lparams->seq_len, kid, pairwise);
@@ -2438,6 +2459,13 @@ static  int vm_cfg80211_add_key(struct wiphy *wiphy, struct net_device *dev, uns
     }
 
     wifi_mac_KeyUpdateBegin(wnet_vif);
+    if (wnet_vif->vm_opmode == WIFINET_M_HOSTAP) {
+        wifi_softap_allsta_stopping(wnet_vif, 1);
+        while (total_delay < 1000 && (!drv_priv->hal_priv->hal_ops.hal_tx_empty())) {
+        msleep(10);
+        total_delay += 10;
+        }
+    }
     if (wifi_mac_security_req(wnet_vif, kr.ik_type, (kr.ik_flags & WIFINET_KEY_COMMON), wk)) {
         int i;
         wk->wk_keylen = kr.ik_keylen;
@@ -2479,9 +2507,10 @@ static  int vm_cfg80211_add_key(struct wiphy *wiphy, struct net_device *dev, uns
         ret = -ENXIO;
         goto new_key_exit;
     }
-
 new_key_exit:
     wifi_mac_KeyUpdateEnd(wnet_vif);
+    if (wnet_vif->vm_opmode == WIFINET_M_HOSTAP)
+        wifi_softap_allsta_stopping(wnet_vif, 0);
 
 exit:
     DPRINTF(AML_DEBUG_CFG80211, "%s(%d): %d\n", __func__, __LINE__, ret);
@@ -2538,6 +2567,8 @@ static int vm_cfg80211_del_key(struct wiphy *wiphy, struct net_device *dev,
 
     while (total_delay < 1000 && ((sta->connect_status != CONNECT_IDLE)
         || (!drv_priv->hal_priv->hal_ops.hal_tx_empty()))) {
+        if (wnet_vif->vm_opmode == WIFINET_M_HOSTAP && sta->is_disconnecting == 0)
+            break;
         msleep(10);
         total_delay += 10;
     }
@@ -4080,21 +4111,49 @@ vm_cfg80211_add_station(
     return 0;
 }
 
+void wifi_softap_allsta_stopping(struct wlan_net_vif *wnet_vif, unsigned char is_disconnecting)
+{
+
+    struct wifi_station *sta_next = NULL;
+    struct wifi_station *sta = NULL;
+
+    struct wifi_station_tbl *nt = &wnet_vif->vm_sta_tbl;
+    WIFINET_NODE_LOCK(nt);
+    list_for_each_entry_safe(sta, sta_next, &nt->nt_nsta, sta_list) {
+        sta->is_disconnecting = is_disconnecting;
+    }
+    WIFINET_NODE_UNLOCK(nt);
+}
+
 static void _del_station(void *arg, struct wifi_station *sta)
 {
     int reason = WLAN_REASON_UNSPECIFIED;
+    int total_delay = 0;
+    struct wlan_net_vif *wnet_vif = sta->sta_wnet_vif;
+    struct wifi_mac *wifimac = wnet_vif->vm_wmac;
+    struct drv_private *drv_priv = wifimac->drv_priv;
+    unsigned short sta_flag = 0;
 
-    DPRINTF(AML_DEBUG_CFG80211, "%s sta:%p sta_associd=%d\n", __func__, sta, sta->sta_associd);
-
+    DPRINTF(AML_DEBUG_CFG80211, "%s sta:%p, sta_associd:%d, sta_flags:0x%x\n", __func__, sta, sta->sta_associd, sta->sta_flags);
+    sta->is_disconnecting = 1;
     if (sta->sta_associd != 0) {
+        sta_flag = sta->sta_flags & WIFINET_NODE_PWR_MGT;
         wifi_mac_pwrsave_state_change(sta, 0);
 
-        if (sta->sta_flags_ext & WIFINET_NODE_REASSOC) {
-            reason = 2;
-            wifi_mac_send_mgmt(sta, WIFINET_FC0_SUBTYPE_DISASSOC, (void *)&reason);
+        if (sta_flag && wnet_vif->vm_opmode == WIFINET_M_HOSTAP) {
+            //do nothing
+        } else {
+            if (sta->sta_flags_ext & WIFINET_NODE_REASSOC) {
+                reason = WLAN_REASON_PREV_AUTH_NOT_VALID;
+                wifi_mac_send_mgmt(sta, WIFINET_FC0_SUBTYPE_DISASSOC, (void *)&reason);
 
         } else {
             wifi_mac_send_mgmt(sta, WIFINET_FC0_SUBTYPE_DEAUTH, (void *)&reason);
+        }
+        while (total_delay < 1000 && (!drv_priv->hal_priv->hal_ops.hal_tx_empty())) {
+            msleep(10);
+            total_delay += 10;
+        }
         }
     }
 }
@@ -4273,30 +4332,30 @@ vm_cfg80211_get_station(struct wiphy *wiphy, struct net_device *dev,
         return ret;
     }
 
-    sinfo->filled |= BIT(NL80211_STA_INFO_SIGNAL);
+    sinfo->filled |= STATION_INFO_SIGNAL;
     sinfo->signal =  sta->sta_avg_bcn_rssi;
     if (sinfo->signal > -10) {
         //DPRINTF(AML_DEBUG_ERROR, "%s signal exceeds scope:%d\n", __func__, sinfo->signal);
         sinfo->signal = -10;
     }
 
-    sinfo->filled |= BIT(NL80211_STA_INFO_TX_BYTES) | BIT(NL80211_STA_INFO_TX_FAILED) | BIT(NL80211_STA_INFO_TX_PACKETS);
+    sinfo->filled |= STATION_INFO_TX_BYTES | STATION_INFO_TX_FAILED | STATION_INFO_TX_PACKETS;
     sinfo->tx_bytes = wnet_vif->vm_devstats.tx_bytes;
     sinfo->tx_packets = wnet_vif->vm_devstats.tx_packets;
     sinfo->tx_failed = wnet_vif->vm_devstats.tx_dropped + wnet_vif->vm_devstats.tx_errors;
 
-    sinfo->filled |= BIT(NL80211_STA_INFO_TX_BITRATE);
+    sinfo->filled |= STATION_INFO_TX_BITRATE;
 
     rate_index = vm_cfg80211_get_rate_index(sta);
 
     sinfo->txrate.legacy = rt->info[rate_index].rateKbps / 100;
 
-    sinfo->filled |= BIT(NL80211_STA_INFO_BSS_PARAM);
+    sinfo->filled |= STATION_INFO_BSS_PARAM;
     sinfo->bss_param.flags = 0;
     sinfo->bss_param.dtim_period = wnet_vif->vm_dtim_period;
     sinfo->bss_param.beacon_interval = wnet_vif->vm_bcn_intval;
 
-    sinfo->filled |= BIT(NL80211_STA_INFO_INACTIVE_TIME);
+    sinfo->filled |= STATION_INFO_INACTIVE_TIME;
     sinfo->inactive_time = (unsigned int)((jiffies - sta->sta_inact_time) * 1000 / HZ);
 
     DPRINTF(AML_DEBUG_CONNECT, "%s signal:%d, tx_bytes:%lld, tx_packets:%d, tx_failed:%d, txrate.legacy:%d, inactive_time:%x\n",
@@ -6446,6 +6505,8 @@ void vm_cfg80211_down(struct wlan_net_vif *wnet_vif)
 
     DPRINTF(AML_DEBUG_CFG80211, "<%s>:%s %d\n", wnet_vif->vm_ndev->name,__func__, __LINE__);
 
+    wnet_vif->vm_phase_flags = 0;
+
     vm_cfg80211_indicate_scan_done(pwdev_priv, true);
 
 #ifdef CONFIG_P2P
@@ -6525,14 +6586,25 @@ vm_wlan_net_vif_attach_ex(struct wlan_net_vif *wnet_vif,struct vm_wlan_net_vif_p
 
 void vm_wlan_net_vif_mode_change(struct wlan_net_vif *wnet_vif,struct vm_wlan_net_vif_params *cp)
 {
-    printk("<running> %s %d \n",__func__,__LINE__);
+    AML_OUTPUT("<running> %s %d \n",__func__,__LINE__);
     wnet_vif->wnet_vif_replaycounter++;
+    if (wnet_vif->vm_ndev->flags & IFF_RUNNING) {
+        /*RUNNING ,For the settings to take effect, need to restart the wifi*/
+        AML_OUTPUT("<running> %s %d mode change need stop open\n",__func__,__LINE__);
+        wifi_mac_stop(wnet_vif->vm_ndev);
+        vm_wlan_net_vif_detach_ex(wnet_vif);
+        vm_wlan_net_vif_attach_ex(wnet_vif,cp);
+        wifi_mac_security_vattach(wnet_vif);
+        wifi_mac_open(wnet_vif->vm_ndev);
 
-    wifi_mac_stop(wnet_vif->vm_ndev);
-    vm_wlan_net_vif_detach_ex(wnet_vif);
-    vm_wlan_net_vif_attach_ex(wnet_vif,cp);
-    wifi_mac_security_vattach(wnet_vif);
-    wifi_mac_open(wnet_vif->vm_ndev);
+    } else {
+        AML_OUTPUT("<running> %s %d mode change not need stop open\n",__func__,__LINE__);
+        /*Not RUNNING ,Just need to set and wait for the upper layer to be up*/
+        vm_wlan_net_vif_detach_ex(wnet_vif);
+        vm_wlan_net_vif_attach_ex(wnet_vif,cp);
+        wifi_mac_security_vattach(wnet_vif);
+
+    }
 }
 
 int wifi_mac_rm_app_ie(struct wifi_mac_app_ie_t  * app_ie)

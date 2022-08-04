@@ -565,6 +565,7 @@ void wifi_cpu_clk_switch(unsigned int clk_cfg)
 #endif
 
 extern unsigned char wifi_in_insmod;
+extern unsigned char wifi_in_rmmod;
 #ifdef ICCM_CHECK
 static unsigned char buf_iccm_rd[ICCM_BUFFER_RD_LEN];
 #endif
@@ -957,6 +958,7 @@ unsigned int aml_wifi_is_enable_rf_test(void)
 }
 
 extern unsigned char wifi_in_insmod;
+extern unsigned char wifi_in_rmmod;
 static int aml_insmod(void)
 {
     int ret = 0;
@@ -1013,7 +1015,9 @@ static void aml_rmmod(void)
 #ifdef DEBUG_MALLOC
     unsigned char i;
 #endif
-
+#ifdef SDIO_BUILD_IN
+    wifi_in_rmmod = 1;
+#endif
     printk("===================aml_rmmod start====================\n");
     hal_exit_priv();
     printk("===================aml_rmmod end====================\n");
@@ -1029,6 +1033,9 @@ static void aml_rmmod(void)
     for (i = 0; i < kfree_count; ++i) {
         printk("free name:%s, count:%d\n", f_pn_buf[i].name, f_pn_buf[i].count);
     }
+#endif
+#ifdef SDIO_BUILD_IN
+    wifi_in_rmmod = 0;
 #endif
 }
 

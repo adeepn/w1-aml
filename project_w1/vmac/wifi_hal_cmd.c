@@ -34,6 +34,9 @@ namespace FW_NAME
 #include "wifi_drv_statistic.h"
 #endif
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 15, 0))
+MODULE_IMPORT_NS(VFS_internal_I_am_really_a_filesystem_and_am_NOT_a_driver);
+#endif
 
 #define WIFI_CONF_PATH "/vendor/etc/wifi/w1"
 
@@ -1171,6 +1174,18 @@ int phy_set_suspend(unsigned char vid, unsigned char enable,
     {
         ERROR_DEBUG_OUT("last suspend fail,don't need resume, just return -1\n");
         return -1;
+    }
+
+    /* wait for set driver sleep flag */
+    while ((enable == 1) && (hal_priv->hal_drv_ps_status & HAL_DRV_IN_ACTIVE))
+    {
+        msleep(20);
+        cnt++;
+        if (cnt > 10)
+        {
+            //AML_OUTPUT("suspend hal_drv_ps_status=%d   time=%d\n",hal_priv->hal_drv_ps_status,cnt);
+            break;
+        }
     }
 
     POWER_BEGIN_LOCK();
