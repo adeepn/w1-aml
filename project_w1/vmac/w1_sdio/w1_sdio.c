@@ -1,12 +1,12 @@
 #include "w1_sdio.h"
 #include <linux/mutex.h>
 
-#include "chip_pmu_reg.h"
-#include "chip_intf_reg.h"
-#include "wifi_intf_addr.h"
-#include "wifi_drv_reg_ops.h"
-#include "rf_d_top_reg.h"
-#include "wifi_coex_addr.h"
+#include "../../common/chip_pmu_reg.h"
+#include "../../common/chip_intf_reg.h"
+#include "../../common/wifi_intf_addr.h"
+#include "../wifi_drv_reg_ops.h"
+#include "../../common/rf_d_top_reg.h"
+#include "../../common/wifi_coex_addr.h"
 
 struct amlw1_hwif_sdio g_w1_hwif_sdio;
 struct amlw1_hif_ops g_w1_hif_ops;

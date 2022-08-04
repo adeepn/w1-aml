@@ -22,7 +22,7 @@ struct sk_buff g_skbuffer[MAX_SKB_NUM];
 #include "rc80211_minstrel_init.h"
 #include "wifi_debug.h"
 #include "wifi_mac.h"
-#include "fi_sdio.h"
+#include "../common/fi_sdio.h"
 #include "wifi_rate_ctrl.h"
 #include "wifi_pkt_desc.h"
 #include "wifi_cfg80211.h"
