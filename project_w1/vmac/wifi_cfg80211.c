@@ -5464,8 +5464,8 @@ unsigned int irr_para_reg_addr[] ={
 
 extern void print_driver_version(void);
 extern unsigned int efuse_manual_read(unsigned int addr);
-char *rssi_result_path = "/vendor/etc/rssi.txt";
-char *reg_result_path = "/data/reg.txt";
+char *rssi_result_path = "/lib/firmware/w1/rssi.txt";
+char *reg_result_path = "/lib/firmware/w1/reg.txt";
 
 void record_reg_value(unsigned int address, unsigned int value)
 {
