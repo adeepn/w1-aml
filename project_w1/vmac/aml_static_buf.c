@@ -25,7 +25,6 @@
 #include <linux/err.h>
 #include "wifi_common.h"
 #include <linux/skbuff.h>
-#include <linux/wlan_plat.h>
 
 #ifdef NOT_AMLOGIC_PLATFORM
 extern void *aml_mem_prealloc(int section, unsigned long size);
