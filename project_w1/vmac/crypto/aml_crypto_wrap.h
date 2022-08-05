@@ -111,6 +111,6 @@ void wpa_hexdump_key(int level, const char *title, const void *buf, size_t len);
 
 void forced_memzero(void *ptr, size_t len);
 void bin_clear_free(void *bin, size_t len);
-u32 crc32(const u8 *frame, size_t frame_len);
+//u32 crc32(const u8 *frame, size_t frame_len);
 
 #endif//_AML_CRYTO_WRAP_H_
