@@ -17,7 +17,7 @@ namespace FW_NAME
 #include "wifi_mac_com.h"
 #include <linux/delay.h>
 #endif
-#include "patch_fi_cmd.h"
+#include "../common/patch_fi_cmd.h"
 
 #if defined (HAL_FPGA_VER)
 struct platform_wifi_gpio amlhal_gpio =
