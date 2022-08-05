@@ -381,7 +381,9 @@ int  dut_stop_tbus_to_get_sram(struct file *filep, int stop_ctrl, int save_file)
     if ((stopaddr <= TBC_ADDR_BEGIN_OFFSET) || (stopaddr >= TBC_ADDR_END_OFFSET)) {
         ERROR_DEBUG_OUT("stopaddr=0x%x out of capture range\n", stopaddr);
         vfs_fsync(filep, 0);
+#ifdef get_fs
         set_fs(fs);
+#endif
         return 0;
     }
 
