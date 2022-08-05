@@ -45,9 +45,10 @@
 #define DRIVER_SKBBUFER_LEN        (MAX_SKB_NUM * sizeof(struct sk_buff) )
 #define  THR_OS_DDR2DMAAddress(__t)  ((void*)__t)
 
-struct thr_list_head {
+#define thr_list_head list_head
+/*struct thr_list_head {
         struct thr_list_head *next, *prev;
-};
+};*/
 
 struct _HI_TxPrivDescripter_chain {
         OS_LIST  workList;
