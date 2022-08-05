@@ -5471,12 +5471,16 @@ void record_reg_value(unsigned int address, unsigned int value)
 {
     struct kstat stat;
     struct file *fp;
+#ifdef get_fs
     mm_segment_t fs;
+#endif
     int error = 0;
     char buf[512] = {0};
 
+#ifdef get_fs
     fs = get_fs();
     set_fs(KERNEL_DS);
+#endif
 
     fp = filp_open(reg_result_path, O_CREAT|O_RDWR, 0644);
 
@@ -5505,7 +5509,9 @@ void record_reg_value(unsigned int address, unsigned int value)
         ERROR_DEBUG_OUT("open file %s failed.\n", reg_result_path);
     }
 err:
+#ifdef get_fs
     set_fs(fs);
+#endif
 }
 
 int vm_cfg80211_vnd_cmd_set_para(struct wiphy *wiphy, struct wireless_dev *wdev, const void *data, int data_len)

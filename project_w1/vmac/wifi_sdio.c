@@ -21,8 +21,8 @@ namespace FW_NAME
 
 #include "wifi_hal.h"
 #include "wifi_hif.h"
-#include "chip_intf_reg.h"
-#include "chip_ana_reg.h"
+#include "../common/chip_intf_reg.h"
+#include "../common/chip_ana_reg.h"
 
 #include "wifi_pt_init.h"
 #include "wifi_pt_network.h"
