@@ -5512,6 +5512,7 @@ err:
 #ifdef get_fs
     set_fs(fs);
 #endif
+    return;
 }
 
 int vm_cfg80211_vnd_cmd_set_para(struct wiphy *wiphy, struct wireless_dev *wdev, const void *data, int data_len)
