@@ -5488,8 +5488,7 @@ void record_reg_value(unsigned int address, unsigned int value)
             sprintf(buf, "address: 0x%08x 0x%08x\r\n",
                 address,
                 value);
-
-            error = vfs_stat(reg_result_path, &stat);
+/*            error = vfs_stat(reg_result_path, &stat);
             if (error) {
                 filp_close(fp, NULL);
                 goto err;
@@ -5500,7 +5499,7 @@ void record_reg_value(unsigned int address, unsigned int value)
                 filp_close(fp, NULL);
                 goto err;
             }
-
+*/
             vfs_write(fp, buf, strlen(buf), &fp->f_pos);
 
         filp_close(fp, NULL);
@@ -5882,7 +5881,7 @@ int vm_cfg80211_vnd_cmd_set_para(struct wiphy *wiphy, struct wireless_dev *wdev,
                     sprintf(&buf[strlen(buf)], "snr_qdb:%d crc_err:%d, crc_ok:%d, noise_f:%d\r\n",
                         arr[5], arr[2], arr[3], arr[4]);
 
-                    error = vfs_stat(rssi_result_path, &stat);
+/*                    error = vfs_stat(rssi_result_path, &stat);
                     if (error) {
                         filp_close(fp, NULL);
                         goto err;
@@ -5893,7 +5892,7 @@ int vm_cfg80211_vnd_cmd_set_para(struct wiphy *wiphy, struct wireless_dev *wdev,
                         filp_close(fp, NULL);
                         goto err;
                     }
-
+*/
                     vfs_write(fp, buf, strlen(buf), &fp->f_pos);
                 }
                 filp_close(fp, NULL);

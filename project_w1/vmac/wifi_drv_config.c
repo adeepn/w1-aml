@@ -407,7 +407,7 @@ int drv_cfg_load_from_file(void)
         fp = NULL;
         goto err;
     }
-
+/*
     error = vfs_stat(cfg_file, &stat);
     if (error) {
         filp_close(fp, NULL);
@@ -419,7 +419,7 @@ int drv_cfg_load_from_file(void)
         filp_close(fp, NULL);
         goto err;
     }
-
+*/
     content = ZMALLOC(size, "aml_drv_cfg", GFP_KERNEL);
 
     if (content == NULL) {
